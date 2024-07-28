@@ -1,0 +1,70 @@
+﻿@model IEnumerable<CaraLuggage.Models.DonHang>
+@{
+    ViewBag.Title = "Danh sách đơn (Khách hàng)";
+    Layout = "~/Views/Shared/UserView.cshtml";
+}
+
+@{
+    string sessionCus = Session["CusID"] as string;
+}
+
+<section id="page-header" class="about-header10">
+    <h2>#thongtincuaban</h2>
+    <p>Nơi bạn có thể tra cứu thông tin của mình!</p>
+</section>
+
+<section id="profile" class="section-p1">
+    <div class="profile-info">
+        <h3>Thông tin tài khoản</h3>
+        <ul class="pro-info">
+            <li><a href="@Url.Action("UserProfile", "Home", new { cusID = sessionCus })">Thông tin cá nhân</a></li>
+            <li><a class="active1" href="@Url.Action("UserOrder", new {  cusID = sessionCus  })">Đơn hàng</a></li>
+            <li><a href="@Url.Action("Logout", "LoginRegister")">Đăng xuất</a></li>
+        </ul>
+    </div>
+
+    <div class="profile-details">
+        <h3>Đơn hàng</h3>
+        <table class="table">
+            <thead>
+                <tr class="border">
+                    <th class="first">Mã Đơn</th>
+                    <th>Ngày Lập</th>
+                    <th>Trạng Thái</th>
+                    <th>Thanh Toán</th>
+                    <th>Giao Hàng</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="border">
+                        <th class="first">
+                            @Html.DisplayFor(modelItem => item.order_code)
+                        </th>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.order_createAt)
+                        </td>
+                        <td>
+                            <span>
+                                @Html.DisplayFor(modelItem => item.order_status)
+                            </span>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhuongThucThanhToan.payment_name)
+                        </td>
+                        <td>
+                            <span>Chờ đóng gói</span>
+                        </td>
+                        <td>
+                            <div class="normal">
+                                <a href="@Url.Action("UserOrderDetail","Home", new { id=item.order_no})">Xem</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+        </table>
+    </div>
+</section>

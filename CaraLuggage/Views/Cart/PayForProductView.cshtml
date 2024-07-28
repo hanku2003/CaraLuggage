@@ -1,0 +1,91 @@
+﻿@model List<CaraLuggage.Models.Cart>
+
+@{
+    ViewBag.Title = "Trang xác nhận thanh toán";
+    Layout = "~/Views/Shared/UserView.cshtml";
+}
+
+<section id="page-header" class="about-header">
+    <h2>#thanhtoandethemniemvui</h2>
+    <p>Bạn có thể thanh toán bằng nhiều hình thức khác nhau</p>
+</section>
+
+<section id="cart" class="section-p1">
+    <table width="100%">
+        <thead>
+            <tr>
+                <td>Image</td>
+                <td>Product</td>
+                <td>Price</td>
+                <td>Quantity</td>
+                <td>Subtotal</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><img src="@item.productImage" alt=""></td>
+                    <td>@item.productName</td>
+                    @{
+                        double price = item.productPrice;
+                    }
+                    <td>@price.ToString("#,##0 VND")</td>
+                    @{
+                        int quantity = item.productQuantity;
+                        double subprice = item.productPrice;
+                        double total = quantity * subprice;
+                    }
+                    <td>
+                        <input min="1" max="" type="number" value="@item.productQuantity" disabled style="width: 40px; padding: 5px;text-align: center;">
+                    </td>
+                    <td id="total-@item.productID">@total.ToString("#,##0 VND")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+@using (Html.BeginForm("PayForProductView", "Cart", FormMethod.Post))
+{
+    <section id="proceed" class="section-p1">
+        <div class="tong-thanh-toan">
+            <div id="subtotal-thanhtoan">
+                <h3>Cart Totals</h3>
+                <br />
+                <table>
+                    <tr>
+                        @{
+                            double subtotal = 0;
+                            if (ViewBag.Total != null)
+                            {
+                                subtotal = ViewBag.Total;
+                            }
+                        }
+                        <td><strong>Total</strong></td>
+                        <td><strong>@subtotal.ToString("#,##0 VND")</strong></td>
+                    </tr>
+                </table>
+            </div>
+
+            <input type="submit" class="normal" style="margin: 10px 0; padding: 18px 32px; border-radius: 5px; text-align: center; text-decoration: none; font-size: 25px; background-color: #8DDFEB; color: white; border: none; cursor: pointer;font-weight:600" value="Thanh toán"/>
+        </div>
+
+        <div id="payment">
+            <h3>Phương thức thanh toán</h3>
+            <div class="radio-title-group">
+                @foreach (var payment in ViewBag.Payment)
+                {
+                    <div class="input-container">
+                        <input type="radio" name="order_payment" id="order_payment" class="cus-btn" checked="checked" value="@payment.payment_no">
+
+                        <div class="radio-title">
+                            <img src="@payment.payment_logo" style="margin-right: 20px;" alt="">
+                            <label for="cod">@payment.payment_name</label>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}
+

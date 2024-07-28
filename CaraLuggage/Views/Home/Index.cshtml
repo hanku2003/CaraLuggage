@@ -1,0 +1,152 @@
+﻿@model IEnumerable<CaraLuggage.Models.SanPham>
+
+@{
+    ViewBag.Title = "Trang chủ";
+    Layout = "~/Views/Shared/UserView.cshtml";
+}
+@using CaraLuggage.Controllers.DecoratorPattern;
+
+
+<section id="hero" class="dark-mode">
+    <h4>Ưu đãi</h4>
+    <h2>Nhiều Ưu Đãi Siêu Giá Trị</h2>
+    <h1>Trên Tất Cả Sản Phẩm</h1>
+    <p>Giảm giá lên đến 70%</p>
+    <button>Mua Ngay</button>
+</section>
+
+<section class="dark-mode section-p1" id="feature">
+    <div class="fe-box">
+        <img src="~/Content/assets/img/features/f1.png" alt="">
+        <h6>Free Shipping</h6>
+    </div>
+    <div class="fe-box">
+        <img src="~/Content/assets/img/features/f2.png" alt="">
+        <h6>Online Order</h6>
+    </div>
+    <div class="fe-box">
+        <img src="~/Content/assets/img/features/f3.png" alt="">
+        <h6>Save Money</h6>
+    </div>
+    <div class="fe-box">
+        <img src="~/Content/assets/img/features/f4.png" alt="">
+        <h6>Promotions</h6>
+    </div>
+    <div class="fe-box">
+        <img src="~/Content/assets/img/features/f5.png" alt="">
+        <h6>Happy Sell</h6>
+    </div>
+    <div class="fe-box">
+        <img src="~/Content/assets/img/features/f6.png" alt="">
+        <h6>F24/7 Support</h6>
+    </div>
+</section>
+
+<!-- ... (các phần code khác) ... -->
+
+<section class="dark-mode section-p1" id="products1">
+    <h2>Sản phẩm nổi bật</h2>
+    <p>Nơi có nhiều mặc hàng nổi bật được đánh giá cao</p>
+
+
+    <div class="pro-container">
+        @foreach (var item in ViewBag.topSellingProducts)
+        {
+            SalesOff sales = new SalesOff(item.product_id);
+            SalesOffDecorator s = new BlackFridaySalesDecorator(sales);
+            double price = (double)item.product_price;
+
+            <div class="pro">
+                <a href="@Url.Action("Index","ProductDetail", new { id=item.product_id })">
+                    <img src="@item.product_image" alt="">
+                    <div class="des">
+                        <span>@item.ThuongHieu.brand_name</span>
+                        <h5>@item.product_name</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        @if (s != null)
+                        {
+                            double priceAfter = s.GetSalesPrice();
+                            <h4><span style="color: #ff0000">@priceAfter.ToString("#,##0 VND")</span><s style="color: #808080; margin-left: 14px;">@price.ToString("#,##0 VND")</s></h4>
+                        }
+                        else
+                        {
+                            <h4><span style="color: #ff0000">@price.ToString("#,##0 VND")</span></h4>
+                        }
+                    </div>
+                    <a href="@Url.Action("AddToCart", "Cart", new { productId = item.product_id })"><i class="fa-solid fa-cart-shopping cart"></i></a>
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+<!-- ... (các phần code khác) ... -->
+
+
+<section id="banner" class="section-m1">
+    <h4>Các dịch vụ sửa chữa</h4>
+    <h2>Giảm giá lên đến <span>70%</span> - Tất cả các mặt hàng Vali, Túi xách - Phụ kiện</h2>
+    <button class="normal">Khám phá</button>
+</section>
+
+<!--New Arrivals-->
+<section class="section-p1" id="products1">
+    <h2>Sản phẩm mới ra mắt</h2>
+    <p>Các sản phẩm, các collection mới được ra mắt</p>
+    <div class="pro-container">
+        @foreach (var item in ViewBag.newArrival)
+        {
+            SalesOff sales = new SalesOff(item.product_id);
+            SalesOffDecorator s = new BlackFridaySalesDecorator(sales);
+            double price = (double)item.product_price;
+            <div class="pro">
+                <a href="@Url.Action("Index","ProductDetail", new { id=item.product_id })">
+                    <img src="@item.product_image" alt="">
+                    <div class="des">
+                        <span>@item.ThuongHieu.brand_name</span>
+                        <h5>@item.product_name</h5>
+                        <div class="star">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        @if (s != null)
+                        {
+                            double priceAfter = s.GetSalesPrice();
+                            <h4><span style="color: #ff0000">@priceAfter.ToString("#,##0 VND")</span><s style="color: #808080; margin-left: 14px;">@price.ToString("#,##0 VND")</s></h4>
+                        }
+                        else
+                        {
+                            <h4><span style="color: #ff0000">@price.ToString("#,##0 VND")</span></h4>
+                        }
+                    </div>
+                    <a href="@Url.Action("AddToCart", "Cart", new { productId = item.product_id })"><i class="fa-solid fa-cart-shopping cart"></i></a>
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+<section id="sm-banner" class="section-p1">
+    <div class="banner-box">
+        <h4>Khuyến mãi cực sốc</h4>
+        <h2>mua 1 tặng 1</h2>
+        <span>Các mẫu Vali cổ điển đang được bày bán tại CaraStore</span>
+        <button class="white">Tìm hiểu thêm</button>
+    </div>
+
+    <div class="banner-box banner-box2">
+        <h4>new brand</h4>
+        <h2>new brand is coming</h2>
+        <span>CaraStore sẽ nhập về hãng Vali, Túi xách hoàn toàn mới</span>
+        <button class="white">Collection</button>
+    </div>
+</section>
